@@ -25,6 +25,8 @@ class AbstractDatabaseImpl {
 
 public:
 
+  virtual ~AbstractDatabaseImpl() = default;
+
   virtual Collection create(const std::string &collectionName) const = 0;
 
   virtual bool exists(const std::string &collectionName) const = 0;

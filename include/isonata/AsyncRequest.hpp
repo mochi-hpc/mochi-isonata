@@ -15,6 +15,8 @@ class AbstractAsyncRequestImpl {
 
 public:
 
+  virtual ~AbstractAsyncRequestImpl() = default;
+
   virtual void wait() const = 0;
 
   virtual bool completed() const = 0;

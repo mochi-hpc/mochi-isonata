@@ -22,6 +22,8 @@ class AbstractAdminImpl {
 
 public:
 
+  virtual ~AbstractAdminImpl() = default;
+
   virtual void createDatabase(
         const std::string &address, uint16_t provider_id,
         const std::string &name, const std::string &type,

@@ -33,20 +33,25 @@ if (${ENABLE_SONATA})
   set (CLIENT_DEPS ${CLIENT_DEPS} sonata-client)
 endif (${ENABLE_SONATA})
 
+configure_file (src/Config.hpp.in Config.hpp)
+
 add_library (isonata-server ${CMAKE_CURRENT_SOURCE_DIR}/src/Provider.cpp)
 target_link_libraries (isonata-server PUBLIC thallium PRIVATE ${SERVER_DEPS})
 target_include_directories (isonata-server PUBLIC $<INSTALL_INTERFACE:include>)
 target_include_directories (isonata-server BEFORE PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+target_include_directories (isonata-server BEFORE PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
 
 add_library (isonata-client ${CMAKE_CURRENT_SOURCE_DIR}/src/Client.cpp)
 target_link_libraries (isonata-client PUBLIC thallium nlohmann_json PRIVATE ${CLIENT_DEPS})
 target_include_directories (isonata-client PUBLIC $<INSTALL_INTERFACE:include>)
 target_include_directories (isonata-client BEFORE PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+target_include_directories (isonata-client BEFORE PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
 
 add_library (isonata-admin ${CMAKE_CURRENT_SOURCE_DIR}/src/Admin.cpp)
 target_link_libraries (isonata-admin PUBLIC thallium nlohmann_json PRIVATE ${ADMIN_DEPS})
 target_include_directories (isonata-admin PUBLIC $<INSTALL_INTERFACE:include>)
 target_include_directories (isonata-admin BEFORE PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+target_include_directories (isonata-admin BEFORE PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
 
 if (${ENABLE_TESTS})
     enable_testing ()

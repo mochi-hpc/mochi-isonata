@@ -14,13 +14,11 @@ namespace isonata {
 
 namespace tl = thallium;
 
-/**
- * @brief A Provider is an object that can receive RPCs
- * and dispatch them to specific databases.
- */
 class AbstractProviderImpl {
 
 public:
+
+  virtual ~AbstractProviderImpl() = default;
 
   virtual std::string getConfig() const = 0;
 
@@ -29,6 +27,10 @@ public:
   virtual operator bool() const = 0;
 };
 
+/**
+ * @brief A Provider is an object that can receive RPCs
+ * and dispatch them to specific databases.
+ */
 class Provider : public AbstractProviderImpl {
 
   std::shared_ptr<AbstractProviderImpl> self;
@@ -50,7 +52,10 @@ public:
    *
    * @return Provider.
    */
-  static Provider create(const tl::engine& engine, const std::string& impl);
+  static Provider create(tl::engine& engine, const std::string& impl,
+                         uint16_t provider_id = 0,
+                         const std::string &config = std::string(),
+                         const tl::pool &pool = tl::pool());
 
   /**
    * @brief Get the internal configuration as a JSON string.

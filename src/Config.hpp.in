@@ -1,0 +1,2 @@
+#cmakedefine ENABLE_SONATA
+#cmakedefine ENABLE_YOKAN

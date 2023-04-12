@@ -17,6 +17,8 @@ class AbstractClientImpl {
 
 public:
 
+  virtual ~AbstractClientImpl() = default;
+
   virtual const thallium::engine &engine() const = 0;
 
   virtual Database open(

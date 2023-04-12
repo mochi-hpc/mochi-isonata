@@ -23,6 +23,8 @@ class AbstractCollectionImpl {
 
 public:
 
+  virtual ~AbstractCollectionImpl() = default;
+
   virtual operator bool() const = 0;
 
   virtual uint64_t store(const std::string &record, bool commit) const {
