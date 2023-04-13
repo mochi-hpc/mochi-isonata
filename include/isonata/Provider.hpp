@@ -9,6 +9,7 @@
 #include <memory>
 #include <string>
 #include <thallium.hpp>
+#include <isonata/Exception.hpp>
 
 namespace isonata {
 
@@ -63,7 +64,9 @@ public:
    * @return The internal configuration.
    */
   std::string getConfig() const override {
-    return self->getConfig();
+    try {
+      return self->getConfig();
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -73,14 +76,18 @@ public:
    * @param token Security token to set.
    */
   void setSecurityToken(const std::string &token) override {
-    return self->setSecurityToken(token);
+    try {
+      return self->setSecurityToken(token);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
    * @brief Checks whether the Provider instance is valid.
    */
   operator bool() const override {
-    return self && *self;
+    try {
+      return self && *self;
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 };
 

@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <string>
+#include <isonata/Exception.hpp>
 
 namespace isonata {
 
@@ -52,14 +53,18 @@ public:
    * @brief Test if the request has completed, without blocking.
    */
   bool completed() const override {
-      return self->completed();
+      try {
+         return self->completed();
+      } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
    * @brief Checks if the object is valid.
    */
   operator bool() const override {
+    try {
       return self && *self;
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 };
 

@@ -160,7 +160,9 @@ public:
    * @brief Checks if the object is valid.
    */
   operator bool() const override {
-    return self && *self;
+    try {
+      return self && *self;
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -172,7 +174,9 @@ public:
    * @return the record id of the stored document.
    */
   uint64_t store(const std::string &record, bool commit = false) const override {
-    return self->store(record, commit);
+    try {
+      return self->store(record, commit);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -184,7 +188,9 @@ public:
    * @return the record id of the stored document.
    */
   uint64_t store(const json &record, bool commit = false) const override {
-    return self->store(record, commit);
+    try {
+      return self->store(record, commit);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -196,7 +202,9 @@ public:
    * @return the record id of the stored document.
    */
   uint64_t store(const char *record, bool commit = false) const override {
-    return self->store(record, commit);
+    try {
+      return self->store(record, commit);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -213,7 +221,9 @@ public:
    */
   void store(const std::string &record, uint64_t *id, bool commit = false,
              AsyncRequest *req = nullptr) const override {
-    return self->store(record, id, commit, req);
+    try {
+      return self->store(record, id, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -230,7 +240,9 @@ public:
    */
   void store(const json &record, uint64_t *id, bool commit = false,
                      AsyncRequest *req = nullptr) const override {
-    return self->store(record, id, commit, req);
+    try {
+      return self->store(record, id, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -246,7 +258,9 @@ public:
    */
   void store(const char *record, uint64_t *id, bool commit = false,
              AsyncRequest *req = nullptr) const override {
-    return self->store(record, id, commit, req);
+    try {
+      return self->store(record, id, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -264,7 +278,9 @@ public:
    */
   void store_multi(const std::vector<std::string> &records, uint64_t *ids,
                    bool commit = false, AsyncRequest *req = nullptr) const override {
-    return self->store_multi(records, ids, commit, req);
+    try {
+      return self->store_multi(records, ids, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -283,7 +299,9 @@ public:
   void store_multi(
         const json &records, uint64_t *ids,
         bool commit = false, AsyncRequest *req = nullptr) const override {
+    try {
       self->store_multi(records, ids, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -302,7 +320,9 @@ public:
    */
   void store_multi(const char *const *records, size_t count, uint64_t *ids,
                    bool commit = false, AsyncRequest *req = nullptr) const override {
-    self->store_multi(records, count, ids, commit, req);
+    try {
+      self->store_multi(records, count, ids, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -315,7 +335,9 @@ public:
    */
   void fetch(uint64_t id, std::string *result,
              AsyncRequest *req = nullptr) const override {
-    self->fetch(id, result, req);
+    try {
+      self->fetch(id, result, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -328,7 +350,9 @@ public:
    */
   void fetch(uint64_t id, json *result,
              AsyncRequest *req = nullptr) const override {
-    self->fetch(id, result, req);
+    try {
+      self->fetch(id, result, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -343,7 +367,9 @@ public:
   void fetch_multi(const uint64_t *ids, size_t count,
                    std::vector<std::string> *result,
                    AsyncRequest *req = nullptr) const override {
-    self->fetch_multi(ids, count, result, req);
+    try {
+      self->fetch_multi(ids, count, result, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -357,7 +383,9 @@ public:
    */
   void fetch_multi(const uint64_t *id, size_t count, json *result,
                    AsyncRequest *req = nullptr) const override {
-    self->fetch_multi(id, count, result, req);
+    try {
+      self->fetch_multi(id, count, result, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -377,7 +405,9 @@ public:
    */
   void filter(const std::string &filterCode, std::vector<std::string> *result,
               AsyncRequest *req = nullptr) const override {
-    self->filter(filterCode, result, req);
+    try {
+      self->filter(filterCode, result, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -397,7 +427,9 @@ public:
    */
   void filter(const std::string &filterCode, json *result,
               AsyncRequest *req = nullptr) const override {
-    self->filter(filterCode, result, req);
+    try {
+      self->filter(filterCode, result, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -411,7 +443,9 @@ public:
    */
   void update(uint64_t id, const json &record, bool commit = false,
               AsyncRequest *req = nullptr) const override {
-    self->update(id, record, commit, req);
+    try {
+      self->update(id, record, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -425,7 +459,9 @@ public:
    */
   void update(uint64_t id, const std::string &record, bool commit = false,
               AsyncRequest *req = nullptr) const override {
-    self->update(id, record, commit, req);
+    try {
+      self->update(id, record, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -439,7 +475,9 @@ public:
    */
   void update(uint64_t id, const char *record, bool commit = false,
               AsyncRequest *req = nullptr) const override {
-    self->update(id, record, commit, req);
+    try {
+      self->update(id, record, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -457,7 +495,9 @@ public:
   void update_multi(const uint64_t *id, const json &record,
                     std::vector<bool> *updated, bool commit = false,
                     AsyncRequest *req = nullptr) const override {
-    self->update_multi(id, record, updated, commit, req);
+    try {
+      self->update_multi(id, record, updated, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -475,7 +515,9 @@ public:
                     const std::vector<std::string> &records,
                     std::vector<bool> *updated, bool commit = false,
                     AsyncRequest *req = nullptr) const override {
-    self->update_multi(ids, records, updated, commit, req);
+    try {
+      self->update_multi(ids, records, updated, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -493,7 +535,9 @@ public:
   void update_multi(uint64_t *ids, const char *const *records, size_t count,
                             std::vector<bool> *updated, bool commit = false,
                             AsyncRequest *req = nullptr) const override {
-    self->update_multi(ids, records, count, updated, commit, req);
+    try {
+      self->update_multi(ids, records, count, updated, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -505,7 +549,9 @@ public:
    * @param req Pointer to a request to wait on.
    */
   void all(std::vector<std::string> *result, AsyncRequest *req = nullptr) const override {
-    self->all(result, req);
+    try {
+      self->all(result, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -517,7 +563,9 @@ public:
    * @param req Pointer to a request to wait on.
    */
   void all(json *result, AsyncRequest *req = nullptr) const override {
-    self->all(result, req);
+    try {
+      self->all(result, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -527,7 +575,9 @@ public:
    * @param req Pointer to a request to wait on.
    */
   uint64_t last_record_id() const override {
-    return self->last_record_id();
+    try {
+      return self->last_record_id();
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -537,7 +587,9 @@ public:
    * @return The size of the collection.
    */
   size_t size() const override {
-    return self->size();
+    try {
+      return self->size();
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -550,7 +602,9 @@ public:
    */
   void erase(uint64_t id, bool commit = false,
              AsyncRequest *req = nullptr) const override {
-    return self->erase(id, commit, req);
+    try {
+      return self->erase(id, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -563,7 +617,9 @@ public:
    */
   void erase_multi(const uint64_t *ids, size_t size, bool commit = false,
                    AsyncRequest *req = nullptr) const override {
-    return self->erase_multi(ids, size, commit, req);
+    try {
+      return self->erase_multi(ids, size, commit, req);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 };
 } // namespace isonata

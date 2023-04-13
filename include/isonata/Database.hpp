@@ -76,7 +76,9 @@ public:
    * @return A valid Collection instance pointing to the new collection.
    */
   Collection create(const std::string &collectionName) const override {
-    return self->create(collectionName);
+    try {
+      return self->create(collectionName);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -87,7 +89,9 @@ public:
    * @return true if the collection exists, false otherwise.
    */
   bool exists(const std::string &collectionName) const override {
-    return self->exists(collectionName);
+    try {
+      return self->exists(collectionName);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -102,7 +106,9 @@ public:
    * @return A valid Collection instance pointing to the collection.
    */
   Collection open(const std::string &collectionName, bool check = true) const override {
-    return self->open(collectionName, check);
+    try {
+      return self->open(collectionName, check);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -111,7 +117,9 @@ public:
    * @param collectionName Name of the collection.
    */
   void drop(const std::string &collectionName) const override {
-    return self->drop(collectionName);
+    try {
+      return self->drop(collectionName);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -129,7 +137,9 @@ public:
         const std::unordered_set<std::string> &vars,
         std::unordered_map<std::string, std::string> *result,
         bool commit = false) const override {
-    return self->execute(code, vars, result, commit);
+    try {
+      return self->execute(code, vars, result, commit);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -147,21 +157,27 @@ public:
         const std::string &code,
         const std::unordered_set<std::string> &vars, json *result,
         bool commit = false) const override {
-    return self->execute(code, vars, result, commit);
+    try {
+      return self->execute(code, vars, result, commit);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
    * @brief Commit any changes made to the database.
    */
   void commit() const override {
-    self->commit();
+    try {
+      self->commit();
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
    * @brief Checks if the Database instance is valid.
    */
   operator bool() const override {
-    return self && *self;
+    try {
+      return self && *self;
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 };
 

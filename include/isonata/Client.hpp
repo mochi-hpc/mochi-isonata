@@ -73,7 +73,9 @@ public:
    * @brief Returns the thallium engine used by the client.
    */
   const thallium::engine &engine() const override {
+    try {
       return self->engine();
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -91,7 +93,9 @@ public:
   Database open(
         const std::string &address, uint16_t provider_id,
         const std::string &db_name, bool check = true) const override {
-    return self->open(address, provider_id, db_name, check);
+    try {
+      return self->open(address, provider_id, db_name, check);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -107,7 +111,9 @@ public:
   Database open(
         const ProviderHandle &ph, const std::string &db_name,
         bool check = true) const override {
-    return self->open(ph, db_name, check);
+    try {
+      return self->open(ph, db_name, check);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
@@ -120,19 +126,25 @@ public:
    */
   ProviderHandle createProviderHandle(
         const std::string &address, uint16_t provider_id) const override {
-    return self->createProviderHandle(address, provider_id);
+    try {
+      return self->createProviderHandle(address, provider_id);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   ProviderHandle createProviderHandle(
         hg_addr_t address, uint16_t provider_id) const override {
-    return self->createProviderHandle(address, provider_id);
+    try {
+      return self->createProviderHandle(address, provider_id);
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 
   /**
    * @brief Checks that the Client instance is valid.
    */
   operator bool() const override {
-    return self && *self;
+    try {
+      return self && *self;
+    } catch(const std::exception& ex) { throw Exception(ex.what()); }
   }
 };
 
