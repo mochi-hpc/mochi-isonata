@@ -4,7 +4,8 @@ spack:
   - nlohmann-json
   - mochi-margo
   - mochi-thallium
-  - mochi-sonata
+  - mochi-sonata@0.6.3
+  - mochi-bedrock~ssg~abtio
   - mercury~boostsys~checksum ^libfabric fabrics=tcp,rxm
   concretizer:
     unify: true

@@ -62,7 +62,7 @@ public:
    */
   static Client create(const tl::engine& engine, const std::string& impl);
 
-  Client();
+  Client() = default;
   Client(Client&&) = default;
   Client(const Client&) = default;
   Client& operator=(Client&&) = default;
