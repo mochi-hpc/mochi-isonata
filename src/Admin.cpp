@@ -14,10 +14,10 @@ Admin Admin::create(const thallium::engine& engine, const std::string& impl) {
         admin.self = std::make_shared<SonataAdmin>(engine);
         return admin;
 #else
-        throw Exception("ISonata was not built with Sonata support", impl);
+        throw Exception("ISonata was not built with Sonata support");
 #endif
     }
-    return Admin{}; // TODO
+    throw Exception("Unknown implementation backend \"{}\"", impl);
 }
 
 }

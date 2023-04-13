@@ -15,10 +15,10 @@ Provider Provider::create(thallium::engine& engine, const std::string& impl,
         provider.self = std::make_shared<SonataProvider>(engine, provider_id, config, pool);
         return provider;
 #else
-        throw Exception("ISonata was not built with Sonata support", impl);
+        throw Exception("ISonata was not built with Sonata support");
 #endif
     }
-    return Provider{}; // TODO
+    throw Exception("Unknown implementation backend \"{}\"", impl);
 }
 
 }
