@@ -35,7 +35,9 @@ class AsyncRequest : public AbstractAsyncRequestImpl {
 
 public:
 
-  AsyncRequest() = default;
+  AsyncRequest(std::shared_ptr<AbstractAsyncRequestImpl> r = nullptr)
+  : self(std::move(r)) {}
+
   AsyncRequest(AsyncRequest&&) = default;
   AsyncRequest(const AsyncRequest&) = default;
   AsyncRequest& operator=(AsyncRequest&&) = default;

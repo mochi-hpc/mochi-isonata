@@ -61,7 +61,9 @@ class Database : public AbstractDatabaseImpl {
 
 public:
 
-  Database() = default;
+  Database(std::shared_ptr<AbstractDatabaseImpl> db = nullptr)
+  : self(std::move(db)) {}
+
   Database(Database&&) = default;
   Database(const Database&) = default;
   Database& operator=(Database&&) = default;

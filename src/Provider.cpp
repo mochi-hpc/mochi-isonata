@@ -18,7 +18,7 @@ Provider Provider::create(thallium::engine& engine, const std::string& impl,
         throw Exception("ISonata was not built with Sonata support");
 #endif
     }
-    throw Exception("Unknown implementation backend \"{}\"", impl);
+    throw Exception("Unknown implementation backend \"" + impl + "\"");
 }
 
 }

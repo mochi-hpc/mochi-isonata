@@ -156,6 +156,15 @@ class Collection : public AbstractCollectionImpl {
 
 public:
 
+  Collection(std::shared_ptr<AbstractCollectionImpl> c = nullptr)
+  : self(std::move(c)) {}
+
+  Collection(Collection&&) = default;
+  Collection(const Collection&) = default;
+  Collection& operator=(Collection&&) = default;
+  Collection& operator=(const Collection&) = default;
+  ~Collection() = default;
+
   /**
    * @brief Checks if the object is valid.
    */
