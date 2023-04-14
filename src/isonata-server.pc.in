@@ -1,0 +1,12 @@
+prefix=@DEST_DIR@
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: isonata-server
+Description: Interface for document storage using Mochi
+Version: @ISONATA_VERSION@
+
+Requires: thallium nlohmann_json @SERVER_PC_REQ@
+Libs: -L${libdir} -lsonata-server @PRIVATE_SERVER_LIBS@
+Cflags: -I${includedir}
