@@ -1,7 +1,7 @@
 #include <isonata/Admin.hpp>
 #include <Config.hpp>
 #ifdef ENABLE_SONATA
-#include "SonataAdmin.hpp"
+#include "sonata/SonataAdmin.hpp"
 #endif
 
 namespace isonata {

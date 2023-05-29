@@ -7,9 +7,10 @@ spack:
   - mochi-sonata@0.6.3
   - mochi-bedrock~ssg~abtio
   - mercury~boostsys~checksum ^libfabric fabrics=tcp,rxm
+  - mochi-yokan
   concretizer:
     unify: true
-    reuse: false
+    reuse: true
   modules:
     prefix_inspections:
       lib: [LD_LIBRARY_PATH]

@@ -4,7 +4,8 @@ enable_testing ()
 set (CMAKE_CXX_STANDARD 14)
 
 option (ENABLE_SONATA "Enable Sonata implementation" OFF)
-option (ENABLE_TESTS  "Enable tests" OFF)
+option (ENABLE_YOKAN "Enable Yokan implementation" OFF)
+option (ENABLE_TESTS "Enable tests" OFF)
 
 # add our cmake module directory to the path
 set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
@@ -18,7 +19,7 @@ set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 # library version set here (e.g. for shared libs).
 #
 set (ISONATA_VERSION_MAJOR 0)
-set (ISONATA_VERSION_MINOR 1)
+set (ISONATA_VERSION_MINOR 2)
 set (ISONATA_VERSION_PATCH 0)
 set (isonata-vers "${ISONATA_VERSION_MAJOR}.${ISONATA_VERSION_MINOR}")
 set (ISONATA_VERSION "${isonata-vers}.${ISONATA_VERSION_PATCH}")
@@ -41,6 +42,7 @@ set (BUILD_SHARED_LIBS "ON" CACHE BOOL "Build a shared library")
 
 find_package (thallium REQUIRED)
 find_package (nlohmann_json REQUIRED)
+
 if (${ENABLE_SONATA})
   find_package (sonata REQUIRED)
   set (SERVER_DEPS ${SERVER_DEPS} sonata-server)
@@ -50,6 +52,16 @@ if (${ENABLE_SONATA})
   set (ADMIN_PC_REQ sonata-admin)
   set (CLIENT_PC_REQ sonata-client)
 endif (${ENABLE_SONATA})
+
+if (${ENABLE_YOKAN})
+  find_package (yokan REQUIRED)
+  set (SERVER_DEPS ${SERVER_DEPS} yokan-server)
+  set (ADMIN_DEPS  ${ADMIN_DEPS}  yokan-admin)
+  set (CLIENT_DEPS ${CLIENT_DEPS} yokan-client)
+  set (SERVER_PC_REQ yokan-server)
+  set (ADMIN_PC_REQ yokan-admin)
+  set (CLIENT_PC_REQ yokan-client)
+endif (${ENABLE_YOKAN})
 
 configure_file (src/Config.hpp.in Config.hpp)
 

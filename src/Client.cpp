@@ -1,7 +1,7 @@
 #include <isonata/Client.hpp>
 #include <Config.hpp>
 #ifdef ENABLE_SONATA
-#include "SonataClient.hpp"
+#include "sonata/SonataClient.hpp"
 #endif
 
 namespace isonata {

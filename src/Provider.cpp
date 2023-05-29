@@ -2,7 +2,7 @@
 #include <isonata/Exception.hpp>
 #include <Config.hpp>
 #ifdef ENABLE_SONATA
-#include "SonataProvider.hpp"
+#include "sonata/SonataProvider.hpp"
 #endif
 
 namespace isonata {
