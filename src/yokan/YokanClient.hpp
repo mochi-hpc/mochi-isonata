@@ -6,52 +6,57 @@
 #include "YokanDatabase.hpp"
 #include <isonata/Client.hpp>
 #include <isonata/Exception.hpp>
+#include <yokan/cxx/client.hpp>
 
 namespace isonata {
 
 class YokanClient : public AbstractClientImpl {
 
+  tl::engine    m_engine;
+  yokan::Client m_client;
+
 public:
 
-  template<typename ... Args>
-  YokanClient(Args&&... args) {}
+  YokanClient(const tl::engine& engine)
+  : m_engine(engine)
+  , m_client(engine.get_margo_instance()) {}
 
   ~YokanClient() {}
 
   const thallium::engine &engine() const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      return m_engine;
   }
 
   Database open(
         const std::string &address, uint16_t provider_id,
-        const std::string &db_name, bool check) const {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+        const std::string &db_name, bool check) const override {
+      (void)check;
+      auto ep = m_engine.lookup(address);
+      auto db = m_client.findDatabaseByName(ep.get_addr(), provider_id, db_name.c_str());
+      return Database{std::make_shared<YokanDatabase>(m_engine, db)};
   }
 
   Database open(
         const ProviderHandle &ph, const std::string &db_name,
         bool check) const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      auto db = m_client.findDatabaseByName(ph.get_addr(), ph.provider_id(), db_name.c_str());
+      return Database{std::make_shared<YokanDatabase>(m_engine, db)};
   }
 
   ProviderHandle createProviderHandle(
         const std::string &address, uint16_t provider_id) const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      auto ep = m_engine.lookup(address);
+      return ProviderHandle{ep, provider_id};
   }
 
   ProviderHandle createProviderHandle(
         hg_addr_t address, uint16_t provider_id) const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      auto ep = tl::endpoint(m_engine, address, false);
+      return ProviderHandle{ep, provider_id};
   }
 
   operator bool() const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      return true;
   }
 };
 

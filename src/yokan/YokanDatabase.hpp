@@ -6,6 +6,8 @@
 #include "YokanCollection.hpp"
 #include <isonata/Database.hpp>
 #include <isonata/Exception.hpp>
+#include <yokan/cxx/database.hpp>
+#include <yokan/cxx/collection.hpp>
 
 namespace isonata {
 
@@ -14,30 +16,36 @@ using nlohmann::json;
 
 class YokanDatabase : public AbstractDatabaseImpl {
 
+  tl::engine      m_engine;
+  yokan::Database m_db;
+
 public:
 
-  YokanDatabase() {}
+  YokanDatabase(const tl::engine& engine, yokan::Database db)
+  : m_engine(engine)
+  , m_db(std::move(db)) {}
 
   ~YokanDatabase() {}
 
   Collection create(const std::string &collectionName) const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      m_db.createCollection(collectionName.c_str());
+      auto coll = std::make_shared<YokanCollection>(m_engine, collectionName.c_str(), m_db);
+      return Collection{coll};
   }
 
   bool exists(const std::string &collectionName) const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      return m_db.collectionExists(collectionName.c_str());
   }
 
   Collection open(const std::string &collectionName, bool check) const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      if(!exists(collectionName))
+          throw Exception(std::string{"Collection "} + collectionName + " does not exist");
+      auto coll = std::make_shared<YokanCollection>(m_engine, collectionName.c_str(), m_db);
+      return Collection{coll};
   }
 
   void drop(const std::string &collectionName) const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      m_db.dropCollection(collectionName.c_str());
   }
 
   void execute(
@@ -45,7 +53,6 @@ public:
         const std::unordered_set<std::string> &vars,
         std::unordered_map<std::string, std::string> *result,
         bool commit) const override {
-      // TODO
       throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
   }
 
@@ -53,18 +60,13 @@ public:
         const std::string &code,
         const std::unordered_set<std::string> &vars, json *result,
         bool commit) const override {
-      // TODO
       throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
   }
 
-  void commit() const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
-  }
+  void commit() const override {}
 
   operator bool() const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      return true;
   }
 };
 
