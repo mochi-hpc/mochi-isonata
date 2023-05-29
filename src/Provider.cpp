@@ -4,6 +4,9 @@
 #ifdef ENABLE_SONATA
 #include "sonata/SonataProvider.hpp"
 #endif
+#ifdef ENABLE_YOKAN
+#include "yokan/YokanProvider.hpp"
+#endif
 
 namespace isonata {
 
@@ -16,6 +19,17 @@ Provider Provider::create(thallium::engine& engine, const std::string& impl,
         return provider;
 #else
         throw Exception("ISonata was not built with Sonata support");
+#endif
+    }
+    if(impl == "yokan") {
+#ifdef ENABLE_YOKAN
+        auto provider = Provider{};
+        provider.self = std::make_shared<YokanProvider>(
+            engine.get_margo_instance(), provider_id, "",
+            config.c_str(), pool.native_handle());
+        return provider;
+#else
+        throw Exception("ISonata was not built with Yokan support");
 #endif
     }
     throw Exception("Unknown implementation backend \"" + impl + "\"");
