@@ -88,9 +88,8 @@ public:
         const std::string &token) const override {
       auto ep = m_engine.lookup(address);
       auto db = m_client.findDatabaseByName(ep.get_addr(), provider_id, name.c_str());
-      // TODO get db_id from db
-      //m_admin.closeDatabase(ep.get_addr(), provider_id, token.c_str(), db_id);
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      auto db_id = db.id();
+      m_admin.closeDatabase(ep.get_addr(), provider_id, token.c_str(), db_id);
   }
 
   void destroyDatabase(
@@ -99,9 +98,8 @@ public:
         const std::string &token) const override {
       auto ep = m_engine.lookup(address);
       auto db = m_client.findDatabaseByName(ep.get_addr(), provider_id, name.c_str());
-      // TODO get db_id from db
-      //m_admin.destroyDatabase(ep.get_addr(), provider_id, token.c_str(), db_id);
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      auto db_id = db.id();
+      m_admin.destroyDatabase(ep.get_addr(), provider_id, token.c_str(), db_id);
   }
 
   std::vector<std::string> listDatabases(

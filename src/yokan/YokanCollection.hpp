@@ -52,6 +52,11 @@ public:
         if(id) *id = i;
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void store(const json &record, uint64_t *id, bool commit,
@@ -62,6 +67,11 @@ public:
         if(id) *id = i;
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void store(const char *record, uint64_t *id, bool commit,
@@ -71,6 +81,11 @@ public:
         if(id) *id = i;
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void store_multi(const std::vector<std::string> &records, uint64_t *ids,
@@ -88,6 +103,11 @@ public:
         m_coll.storeMulti(n, documents.data(), docsizes.data(), ids);
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void store_multi(const json &records, uint64_t *ids,
@@ -110,6 +130,11 @@ public:
         m_coll.storeMulti(n, documents.data(), docsizes.data(), ids);
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void store_multi(const char *const *records, size_t count, uint64_t *ids,
@@ -123,6 +148,11 @@ public:
         m_coll.storeMulti(count, (const void* const*)records, docsizes.data(), ids);
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void fetch(uint64_t id, std::string *result,
@@ -135,6 +165,11 @@ public:
         if(result) *result = std::move(buffer);
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void fetch(uint64_t id, json *result,
@@ -147,6 +182,11 @@ public:
         if(result) *result = json::parse(buffer);
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void fetch_multi(const uint64_t *ids, size_t count,
@@ -169,6 +209,11 @@ public:
         *result = std::move(buffers);
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void fetch_multi(const uint64_t *ids, size_t count, json *result,
@@ -191,6 +236,11 @@ public:
         }
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void filter(const std::string &filterCode, std::vector<std::string> *result,
@@ -212,6 +262,11 @@ public:
           m_coll.update(id, (void*)record.data(), record.size());
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void update(uint64_t id, const json &record, bool commit,
@@ -222,6 +277,11 @@ public:
           m_coll.update(id, (void*)record_str.data(), record_str.size());
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void update(uint64_t id, const char *record, bool commit,
@@ -231,6 +291,11 @@ public:
           m_coll.update(id, (void*)record, strlen(record));
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void update_multi(const uint64_t *ids, const json &records,
@@ -255,6 +320,11 @@ public:
           }
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void update_multi(const uint64_t *ids,
@@ -278,6 +348,11 @@ public:
           }
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void update_multi(uint64_t *ids, const char *const *records, size_t count,
@@ -300,6 +375,11 @@ public:
           }
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void all(std::vector<std::string> *result, AsyncRequest *req) const override {
@@ -327,6 +407,11 @@ public:
         m_coll.erase(id);
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 
   void erase_multi(const uint64_t *ids, size_t size, bool commit,
@@ -336,6 +421,11 @@ public:
         m_coll.eraseMulti(size, ids);
       };
       if(!req) thread();
+      else *req = AsyncRequest{
+        std::make_shared<YokanAsyncRequest>(
+          m_engine.get_progress_pool().make_thread(std::move(thread))
+        )
+      };
   }
 };
 

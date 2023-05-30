@@ -10,20 +10,26 @@
 #include <isonata/Database.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_all.hpp>
+#include <catch2/generators/catch_generators.hpp>
+
+using namespace Catch::Generators;
+
 
 using json = nlohmann::json;
 
 static const std::string resource_type = "unqlite";
-static constexpr const char* resource_config = "{ \"path\" : \"mydb\" }";
+static constexpr const char* resource_config = "{ \"path\" : \"mydb\", \"mode\":\"create\" }";
 
 TEST_CASE("Client tests", "[client]") {
 
+    auto backend = GENERATE(as<std::string>{}, "yokan", "sonata");
+
     auto engine = thallium::engine("na+sm", THALLIUM_SERVER_MODE);
     // Initialize the Sonata provider
-    isonata::Provider provider = isonata::Provider::create(engine, "sonata");
+    isonata::Provider provider = isonata::Provider::create(engine, backend);
 
     // Create an admin
-    isonata::Admin admin = isonata::Admin::create(engine, "sonata");
+    isonata::Admin admin = isonata::Admin::create(engine, backend);
     std::string addr = engine.self();
 
     // Create a database
@@ -31,7 +37,7 @@ TEST_CASE("Client tests", "[client]") {
 
     SECTION("Create client") {
 
-      isonata::Client client = isonata::Client::create(engine, "sonata");
+      isonata::Client client = isonata::Client::create(engine, backend);
 
       SECTION("Open database") {
 

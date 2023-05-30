@@ -24,9 +24,10 @@ Provider Provider::create(thallium::engine& engine, const std::string& impl,
     if(impl == "yokan") {
 #ifdef ENABLE_YOKAN
         auto provider = Provider{};
+        std::string cfg = config.empty() ? "{}" : config;
         provider.self = std::make_shared<YokanProvider>(
             engine.get_margo_instance(), provider_id, "",
-            config.c_str(), pool.native_handle());
+            cfg.c_str(), pool.native_handle());
         return provider;
 #else
         throw Exception("ISonata was not built with Yokan support");

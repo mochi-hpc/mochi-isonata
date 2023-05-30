@@ -7,7 +7,7 @@ spack:
   - mochi-sonata@0.6.3
   - mochi-bedrock~ssg~abtio
   - mercury~boostsys~checksum ^libfabric fabrics=tcp,rxm
-  - mochi-yokan
+  - mochi-yokan@0.2.11:+unqlite
   concretizer:
     unify: true
     reuse: true

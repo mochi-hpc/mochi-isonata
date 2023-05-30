@@ -3,6 +3,7 @@
  *
  * See COPYRIGHT in top-level directory.
  */
+#include <thallium.hpp>
 #include <isonata/AsyncRequest.hpp>
 #include <isonata/Exception.hpp>
 
@@ -10,32 +11,32 @@ namespace isonata {
 
 class YokanCollection;
 
+namespace tl = thallium;
+
 class YokanAsyncRequest : public AbstractAsyncRequestImpl {
 
   friend class YokanCollection;
 
+  mutable tl::managed<tl::thread> m_ult;
+
 public:
 
-  YokanAsyncRequest()
-  {
-      // TODO
-  }
+  YokanAsyncRequest(tl::managed<tl::thread> ult)
+  : m_ult(std::move(ult))
+  {}
 
   ~YokanAsyncRequest() {}
 
   void wait() const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      m_ult->join();
   }
 
   bool completed() const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      return m_ult->state() == tl::thread_state::terminated;
   }
 
   operator bool() const override {
-      // TODO
-      throw Exception{std::string{"Function "} + __PRETTY_FUNCTION__ + " is not implemented"};
+      return true;
   }
 };
 
