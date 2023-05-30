@@ -47,50 +47,50 @@ public:
 
   void store(const std::string &record, uint64_t *id, bool commit,
              AsyncRequest *req) const override {
-      auto thread = [&]() {
+      auto thread = [&record, id, this]() {
         auto i = m_coll.store(record.data(), record.size());
         if(id) *id = i;
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void store(const json &record, uint64_t *id, bool commit,
              AsyncRequest *req) const override {
-      auto thread = [&]() {
+      auto thread = [&record, id, this]() {
         auto record_str = record.dump();
         auto i = m_coll.store(record_str.data(), record_str.size());
         if(id) *id = i;
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void store(const char *record, uint64_t *id, bool commit,
              AsyncRequest *req) const override {
-      auto thread = [&]() {
+      auto thread = [record, id, this]() {
         auto i = m_coll.store(record, strlen(record));
         if(id) *id = i;
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void store_multi(const std::vector<std::string> &records, uint64_t *ids,
                    bool commit, AsyncRequest *req) const override {
-      auto thread = [&]() {
+      auto thread = [&records, ids, this]() {
         const auto n = records.size();
         std::vector<const void*> documents;
         std::vector<size_t>      docsizes;
@@ -103,16 +103,16 @@ public:
         m_coll.storeMulti(n, documents.data(), docsizes.data(), ids);
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void store_multi(const json &records, uint64_t *ids,
                    bool commit, AsyncRequest *req) const override {
-      auto thread = [&]() {
+      auto thread = [&records, ids, this]() {
         const auto n = records.size();
         std::vector<std::string> docs;
         std::vector<const void*> documents;
@@ -130,16 +130,16 @@ public:
         m_coll.storeMulti(n, documents.data(), docsizes.data(), ids);
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void store_multi(const char *const *records, size_t count, uint64_t *ids,
                    bool commit, AsyncRequest *req) const override {
-      auto thread = [&]() {
+      auto thread = [records, count, ids, this]() {
         std::vector<size_t> docsizes;
         docsizes.reserve(count);
         for(unsigned i = 0; i < count; ++i) {
@@ -148,16 +148,16 @@ public:
         m_coll.storeMulti(count, (const void* const*)records, docsizes.data(), ids);
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void fetch(uint64_t id, std::string *result,
              AsyncRequest *req) const override {
-      auto thread = [&]() {
+      auto thread = [id, result, this]() {
         size_t size = m_coll.length(id);
         std::string buffer(size, '\0');
         m_coll.load(id, (void*)buffer.data(), &size);
@@ -165,16 +165,16 @@ public:
         if(result) *result = std::move(buffer);
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void fetch(uint64_t id, json *result,
              AsyncRequest *req) const override {
-      auto thread = [&]() {
+      auto thread = [id, result, this]() {
         size_t size = m_coll.length(id);
         std::string buffer(size, '\0');
         m_coll.load(id, (void*)buffer.data(), &size);
@@ -182,17 +182,17 @@ public:
         if(result) *result = json::parse(buffer);
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void fetch_multi(const uint64_t *ids, size_t count,
                    std::vector<std::string> *result,
                    AsyncRequest *req) const override {
-      auto thread = [&]() {
+      auto thread = [ids, count, result, this]() {
         std::vector<size_t> sizes(count);
         m_coll.lengthMulti(count, ids, sizes.data());
         std::vector<std::string> buffers(count);
@@ -209,16 +209,16 @@ public:
         *result = std::move(buffers);
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void fetch_multi(const uint64_t *ids, size_t count, json *result,
                    AsyncRequest *req) const override {
-      auto thread = [&]() {
+      auto thread = [ids, count, result, this]() {
         std::vector<size_t> sizes(count);
         m_coll.lengthMulti(count, ids, sizes.data());
         std::vector<std::string> buffers(count);
@@ -236,11 +236,11 @@ public:
         }
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void filter(const std::string &filterCode, std::vector<std::string> *result,
@@ -258,51 +258,51 @@ public:
   void update(uint64_t id, const std::string &record, bool commit,
               AsyncRequest *req) const override {
       (void)commit;
-      auto thread = [&]() {
+      auto thread = [id, &record, this]() {
           m_coll.update(id, (void*)record.data(), record.size());
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void update(uint64_t id, const json &record, bool commit,
               AsyncRequest *req) const override {
       (void)commit;
-      auto thread = [&]() {
+      auto thread = [id, &record, this]() {
           auto record_str = record.dump();
           m_coll.update(id, (void*)record_str.data(), record_str.size());
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void update(uint64_t id, const char *record, bool commit,
               AsyncRequest *req) const override {
       (void)commit;
-      auto thread = [&]() {
+      auto thread = [id, record, this]() {
           m_coll.update(id, (void*)record, strlen(record));
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void update_multi(const uint64_t *ids, const json &records,
                     std::vector<bool> *updated, bool commit,
                     AsyncRequest *req) const override {
       (void)commit;
-      auto thread = [&]() {
+      auto thread = [ids, &records, updated, this]() {
           auto n = records.size();
           std::vector<std::string> docs(n);
           std::vector<const void*> docsPtr(n);
@@ -320,11 +320,11 @@ public:
           }
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void update_multi(const uint64_t *ids,
@@ -332,7 +332,7 @@ public:
                     std::vector<bool> *updated, bool commit,
                     AsyncRequest *req) const override {
       (void)commit;
-      auto thread = [&]() {
+      auto thread = [ids, &records, updated, this]() {
           auto n = records.size();
           std::vector<const void*> docsPtr(n);
           std::vector<size_t> docSizes(n);
@@ -348,18 +348,18 @@ public:
           }
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void update_multi(uint64_t *ids, const char *const *records, size_t count,
                     std::vector<bool> *updated, bool commit,
                     AsyncRequest *req) const override {
       (void)commit;
-      auto thread = [&]() {
+      auto thread = [ids, records, count, updated, this]() {
           auto n = count;
           std::vector<const void*> docsPtr(n);
           std::vector<size_t> docSizes(n);
@@ -375,11 +375,11 @@ public:
           }
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void all(std::vector<std::string> *result, AsyncRequest *req) const override {
@@ -403,29 +403,29 @@ public:
   void erase(uint64_t id, bool commit,
              AsyncRequest *req) const override {
       (void)commit;
-      auto thread = [&]() {
+      auto thread = [id, this]() {
         m_coll.erase(id);
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 
   void erase_multi(const uint64_t *ids, size_t size, bool commit,
                    AsyncRequest *req) const override {
       (void)commit;
-      auto thread = [&]() {
+      auto thread = [ids, size, this]() {
         m_coll.eraseMulti(size, ids);
       };
       if(!req) thread();
-      else *req = AsyncRequest{
-        std::make_shared<YokanAsyncRequest>(
-          m_engine.get_progress_pool().make_thread(std::move(thread))
-        )
-      };
+      else {
+        auto ult = m_engine.get_progress_pool().make_thread(std::move(thread));
+        tl::thread::yield_to(*ult);
+        *req = AsyncRequest{std::make_shared<YokanAsyncRequest>(std::move(ult))};
+      }
   }
 };
 

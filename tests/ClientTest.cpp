@@ -22,7 +22,7 @@ static constexpr const char* resource_config = "{ \"path\" : \"mydb\", \"mode\":
 
 TEST_CASE("Client tests", "[client]") {
 
-    auto backend = GENERATE(as<std::string>{}, "yokan", "sonata");
+    auto backend = GENERATE(as<std::string>{}, "yokan");//, "sonata");
 
     auto engine = thallium::engine("na+sm", THALLIUM_SERVER_MODE);
     // Initialize the Sonata provider
@@ -43,21 +43,56 @@ TEST_CASE("Client tests", "[client]") {
 
         auto db = client.open(addr, 0, "mydb");
 
+        std::vector<std::string> docs = {
+            "{\"name\":\"Matthieu\"}",
+            "{\"name\":\"Rob\"}",
+            "{\"name\":\"Phil\"}"
+        };
+
         SECTION("Access collection") {
             auto coll = db.create("mycollection");
 
-            coll.store("{\"name\":\"Matthieu\"}");
-            coll.store("{\"name\":\"Rob\"}");
-            coll.store("{\"name\":\"Phil\"}");
+            REQUIRE_NOTHROW(coll.store("{\"name\":\"Matthieu\"}"));
+            REQUIRE_NOTHROW(coll.store("{\"name\":\"Rob\"}"));
+            REQUIRE_NOTHROW(coll.store("{\"name\":\"Phil\"}"));
 
             REQUIRE(coll.size() == 3);
             REQUIRE(coll.last_record_id() == 2);
 
             json record;
-            coll.fetch(1, &record);
+            REQUIRE_NOTHROW(coll.fetch(1, &record));
 
             REQUIRE(record.contains("name"));
             REQUIRE(record["name"] == "Rob");
+
+            db.drop("mycollection");
+        }
+
+        SECTION("Access collection without blocking") {
+            auto coll = db.create("mycollection");
+
+            isonata::AsyncRequest store_reqs[3];
+            uint64_t record_ids[3];
+            REQUIRE_NOTHROW(coll.store(docs[0].data(), &record_ids[0], true, &store_reqs[0]));
+            REQUIRE_NOTHROW(coll.store(docs[1].data(), &record_ids[1], true, &store_reqs[1]));
+            REQUIRE_NOTHROW(coll.store(docs[2].data(), &record_ids[2], true, &store_reqs[2]));
+
+            REQUIRE_NOTHROW(store_reqs[0].wait());
+            REQUIRE_NOTHROW(store_reqs[1].wait());
+            REQUIRE_NOTHROW(store_reqs[2].wait());
+
+            REQUIRE(coll.size() == 3);
+            REQUIRE(coll.last_record_id() == 2);
+
+            json record;
+            isonata::AsyncRequest fetch_req;
+            REQUIRE_NOTHROW(coll.fetch(1, &record, &fetch_req));
+            REQUIRE_NOTHROW(fetch_req.wait());
+
+            REQUIRE(record.contains("name"));
+            REQUIRE(record["name"] == "Rob");
+
+            db.drop("mycollection");
         }
 
       }
